@@ -1,0 +1,261 @@
+Sub Button_1()
+
+'Clear the drawing area'
+Call Clear_Seg_Drawing
+
+Dim displayLeft
+Dim displayTop
+Dim displayWidth
+Dim displayHeight
+
+Dim displayCenterX
+Dim displayCenterY
+
+Dim windowSpace
+Dim coreLength
+Dim totalSegments
+Dim segmentWidth
+Dim endSegmentWidth
+Dim totalFullSeg As Integer
+
+Dim segHeight
+Dim segTop
+
+Dim i As Integer
+
+Dim inToPix
+inToPix = 75
+
+'Sets how tall the segments will appear in the drawing
+segHeight = 50
+
+'Sets up the Display Window variables
+displayLeft = 20
+displayTop = 20
+displayWidth = 2000
+displayHeight = 600
+
+dispCentX = displayLeft + (displayWidth / 2)
+dispCentY = displayTop + (displayHeight / 2)
+
+segTop = dispCentY - 100
+
+Set myValues = Sheet1
+Set myDocument = Sheet2
+
+'Draw Display Window
+myDocument.Shapes.AddShape(msoShapeRectangle, displayLeft, displayTop, displayWidth, displayHeight).Fill.ForeColor.RGB = RGB(255, 255, 255)
+
+'Get user-entered values from spreadsheet
+windowSpace = myValues.Range("B4").Value
+coreLength = myValues.Range("B7").Value
+totalSegments = myValues.Range("B12").Value
+segmentWidth = myValues.Range("B9").Value
+endSegmentWidth = myValues.Range("B11").Value
+totalFullSeg = myValues.Range("B10").Value
+
+'Convert user-entered values from inches to pixels (1 Inch = 75 pixels)
+winSpacePix = windowSpace * inToPix
+coreLenPix = coreLength * inToPix
+segWidthPix = segmentWidth * inToPix
+endSegWidPix = endSegmentWidth * inToPix
+
+'Draw center segment
+Dim segNum As String
+segNum = (totalSegments + 1) / 2
+With myDocument.Shapes.AddShape(msoShapeRectangle, (dispCentX - (segWidthPix / 2)), segTop, segWidthPix, segHeight)
+    .Fill.ForeColor.RGB = RGB(255, 255, 255)
+    .TextFrame.Characters.Font.Color = RGB(0, 0, 0)
+    .TextFrame.Characters.Text = segNum
+End With
+    
+'Draw remaining segments (each loop draws 1 segment on each side of center segment)
+i = 1
+Do While i < ((totalSegments - 1) / 2)
+    'Draw full segments with numbers inside'
+        With myDocument.Shapes.AddShape(msoShapeRectangle, (dispCentX - (segWidthPix * (i + 0.5))), segTop, segWidthPix, segHeight)
+            .Fill.ForeColor.RGB = RGB(255, 255, 255)
+            .TextFrame.Characters.Font.Color = RGB(0, 0, 0)
+            .TextFrame.Characters.Text = segNum - i
+        End With
+        
+ 
+        With myDocument.Shapes.AddShape(msoShapeRectangle, (dispCentX + (segWidthPix * (i - 0.5))), segTop, segWidthPix, segHeight)
+            .Fill.ForeColor.RGB = RGB(255, 255, 255)
+            .TextFrame.Characters.Font.Color = RGB(0, 0, 0)
+            .TextFrame.Characters.Text = segNum + i
+        End With
+        i = i + 1
+Loop
+
+'Draw end segments with numbers inside'
+    With myDocument.Shapes.AddShape(msoShapeRectangle, (dispCentX - (segWidthPix * ((i - 1) + 0.5)) - endSegWidPix), segTop, endSegWidPix, segHeight)
+        .Fill.ForeColor.RGB = RGB(255, 255, 255)
+        .TextFrame.Characters.Font.Color = RGB(0, 0, 0)
+        .TextFrame.Characters.Text = segNum - i
+    End With
+    With myDocument.Shapes.AddShape(msoShapeRectangle, (dispCentX + (segWidthPix * (i - 0.5))), segTop, endSegWidPix, segHeight)
+        .Fill.ForeColor.RGB = RGB(255, 255, 255)
+        .TextFrame.Characters.Font.Color = RGB(0, 0, 0)
+        .TextFrame.Characters.Text = segNum + i
+    End With
+    
+
+'Draw core positions
+
+Dim coreHeight
+Dim coreTop
+
+Dim p1, p1Txt
+Dim p2, p2Txt
+Dim p3, p3Txt
+Dim p4, p4Txt
+Dim p5, p5Txt
+Dim p6, p6Txt
+Dim p7, p7Txt
+Dim p8, p8Txt
+Dim p9, p9Txt
+Dim p10, p10Txt
+Dim p11, p11Txt
+
+
+'Sets how tall the core will appear
+coreHeight = 30
+
+'Set the core y-value
+coreTop = segTop + 100
+
+'Calculates the x-position of the core when it is in the center position
+Dim centCoreX
+centCoreX = dispCentX - (coreLenPix / 2)
+
+'Position Labels
+p1Txt = (myValues.Range("D4").Value)
+p2Txt = (myValues.Range("D5").Value)
+p3Txt = (myValues.Range("D6").Value)
+p4Txt = (myValues.Range("D7").Value)
+p5Txt = (myValues.Range("D8").Value)
+p6Txt = (myValues.Range("D9").Value)
+p7Txt = (myValues.Range("D10").Value)
+p8Txt = (myValues.Range("D11").Value)
+p9Txt = (myValues.Range("D12").Value)
+p10Txt = (myValues.Range("D13").Value)
+p11Txt = (myValues.Range("D14").Value)
+
+'Positions in pixels
+p1 = (myValues.Range("D4").Value) * inToPix
+p2 = (myValues.Range("D5").Value) * inToPix
+p3 = (myValues.Range("D6").Value) * inToPix
+p4 = (myValues.Range("D7").Value) * inToPix
+p5 = (myValues.Range("D8").Value) * inToPix
+p6 = (myValues.Range("D9").Value) * inToPix
+p7 = (myValues.Range("D10").Value) * inToPix
+p8 = (myValues.Range("D11").Value) * inToPix
+p9 = (myValues.Range("D12").Value) * inToPix
+p10 = (myValues.Range("D13").Value) * inToPix
+p11 = (myValues.Range("D14").Value) * inToPix
+
+'Draw the center core position
+'With myDocument.Shapes.AddShape(msoShapeRectangle, (centCoreX + p6), coreTop, coreLenPix, coreHeight)
+'    .Fill.ForeColor.RGB = RGB(255, 255, 255)
+'    .TextFrame.Characters.Font.Color = RGB(0, 0, 0)
+'    .TextFrame.Characters.Text = myValues.Range("D9").Value
+'End With
+Draw_Core_Pos (centCoreX + p6), coreTop, coreLenPix, coreHeight, p6Txt, segTop, segHeight, "left"
+
+'Draw line at center core position'
+Draw_Line (centCoreX + p6), coreTop, (centCoreX + p6), segTop + segHeight
+'Draw_Line (centCoreX + p6 + coreLenPix), coreTop, (centCoreX + p6 + coreLenPix), segTop + segHeight
+
+'Draw the other core positions with lines and labels'
+Draw_Core_Pos (centCoreX + p7), coreTop + coreHeight + 10, coreLenPix, coreHeight, p7Txt, segTop, segHeight, "right"
+Draw_Core_Pos (centCoreX + p5), coreTop + coreHeight + 10, coreLenPix, coreHeight, p5Txt, segTop, segHeight, "left"
+Draw_Core_Pos (centCoreX + p4), coreTop + (2 * (coreHeight + 10)), coreLenPix, coreHeight, p4Txt, segTop, segHeight, "left"
+Draw_Core_Pos (centCoreX + p3), coreTop + (3 * (coreHeight + 10)), coreLenPix, coreHeight, p3Txt, segTop, segHeight, "left"
+Draw_Core_Pos (centCoreX + p2), coreTop + (4 * (coreHeight + 10)), coreLenPix, coreHeight, p2Txt, segTop, segHeight, "left"
+Draw_Core_Pos (centCoreX + p1), coreTop + (5 * (coreHeight + 10)), coreLenPix, coreHeight, p1Txt, segTop, segHeight, "left"
+
+Draw_Core_Pos (centCoreX + p8), coreTop + (2 * (coreHeight + 10)), coreLenPix, coreHeight, p8Txt, segTop, segHeight, "right"
+Draw_Core_Pos (centCoreX + p9), coreTop + (3 * (coreHeight + 10)), coreLenPix, coreHeight, p9Txt, segTop, segHeight, "right"
+Draw_Core_Pos (centCoreX + p10), coreTop + (4 * (coreHeight + 10)), coreLenPix, coreHeight, p10Txt, segTop, segHeight, "right"
+Draw_Core_Pos (centCoreX + p11), coreTop + (5 * (coreHeight + 10)), coreLenPix, coreHeight, p11Txt, segTop, segHeight, "right"
+
+'Draw the other lines'
+Draw_Line (centCoreX + p1), coreTop + (5 * (coreHeight + 10)), (centCoreX + p1), segTop + segHeight
+Draw_Line (centCoreX + p2), coreTop + (4 * (coreHeight + 10)), (centCoreX + p2), segTop + segHeight
+Draw_Line (centCoreX + p3), coreTop + (3 * (coreHeight + 10)), (centCoreX + p3), segTop + segHeight
+Draw_Line (centCoreX + p4), coreTop + (2 * (coreHeight + 10)), (centCoreX + p4), segTop + segHeight
+Draw_Line (centCoreX + p5), coreTop + (1 * (coreHeight + 10)), (centCoreX + p5), segTop + segHeight
+Draw_Line (centCoreX + p7 + coreLenPix), coreTop + (1 * (coreHeight + 10)), (centCoreX + p7 + coreLenPix), segTop + segHeight
+Draw_Line (centCoreX + p8 + coreLenPix), coreTop + (2 * (coreHeight + 10)), (centCoreX + p8 + coreLenPix), segTop + segHeight
+Draw_Line (centCoreX + p9 + coreLenPix), coreTop + (3 * (coreHeight + 10)), (centCoreX + p9 + coreLenPix), segTop + segHeight
+Draw_Line (centCoreX + p10 + coreLenPix), coreTop + (4 * (coreHeight + 10)), (centCoreX + p10 + coreLenPix), segTop + segHeight
+Draw_Line (centCoreX + p11 + coreLenPix), coreTop + (5 * (coreHeight + 10)), (centCoreX + p11 + coreLenPix), segTop + segHeight
+
+End Sub
+
+'Adds a text box to spreadsheet'
+Sub Macro1()
+    ActiveSheet.Shapes.AddTextbox(msoTextOrientationHorizontal, 42#, 70, _
+        540#, 101.25).Select
+    Selection.Characters.Text = "This is a test.  This is only a test."
+    With Selection.Characters(Start:=1, Length:=37).Font
+        .Name = "Arial"
+        .FontStyle = "Bold"
+        .Size = 10
+        .Strikethrough = False
+        .Superscript = False
+        .Subscript = False
+        .OutlineFont = False
+        .Shadow = False
+        .Underline = xlUnderlineStyleNone
+        .ColorIndex = xlAutomatic
+    End With
+    Selection.ShapeRange.ScaleWidth 0.34, msoFalse, msoScaleFromTopLeft
+    Selection.ShapeRange.ScaleHeight 0.27, msoFalse, msoScaleFromTopLeft
+    Selection.ShapeRange.IncrementLeft -4.5
+    Selection.ShapeRange.IncrementTop 66.75
+    Selection.ShapeRange.Fill.Visible = msoFalse
+    Selection.ShapeRange.Line.Visible = msoFalse
+End Sub
+Sub Clear_Seg_Drawing()
+
+Dim Shp As Shape
+For Each Shp In ActiveSheet.Shapes
+    If Shp.Type = msoAutoShape Or Shp.Type = msoTextBox Or Shp.Type = msoLine Then Shp.Delete
+Next Shp
+
+End Sub
+
+Sub Draw_Line(leftStart, topStart, leftStop, topStop)
+
+Set myDocument = Sheet2
+With myDocument.Shapes.AddLine(leftStart, topStart, leftStop, topStop).Line
+    .DashStyle = msoLineDash
+    .ForeColor.RGB = RGB(255, 0, 0)
+End With
+
+End Sub
+
+Sub Draw_Core_Pos(left, top, width, height, pos, segTop, segHeight, side)
+
+Set myDocument = Sheet2
+Set myValues = Sheet1
+
+Dim coreLength
+Dim coreLenPix
+coreLength = myValues.Range("B7").Value
+coreLenPix = coreLength * 75
+
+With myDocument.Shapes.AddShape(msoShapeRectangle, left, top, width, height)
+    .Fill.ForeColor.RGB = RGB(255, 255, 255)
+    .TextFrame.Characters.Font.Color = RGB(0, 0, 0)
+    .TextFrame.Characters.Text = pos
+    .Line.ForeColor.RGB = RGB(0, 0, 0)
+End With
+
+If side <> "right" Then Draw_Line left + coreLenPix, top, left + coreLenPix, segTop + segHeight
+If side <> "left" Then Draw_Line left, top, left, segTop + segHeight
+
+End Sub
+
